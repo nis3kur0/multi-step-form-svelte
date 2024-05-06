@@ -1,44 +1,54 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { step3Data } from './FormStores.js';
+  import { createEventDispatcher } from 'svelte';
+
   const dispatch = createEventDispatcher();
 
+  export let billingType = 'Monthly';
 
-  export let billingType = "Monthly";
+  let selectedAddons = [];
 
-  let checkboxChecked = false;
 
-function toggleCheckbox() {
-  checkboxChecked = !checkboxChecked;
-  changeCheckbox();
-}
+  function changeCheckbox() {
+    const checkboxes = document.querySelectorAll('.checkbox-type input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      const checkboxType = checkbox.parentElement;
+      if (checkbox.checked) {
+        checkboxType.style.backgroundColor = 'var(--magnolia)';
+        checkboxType.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+      } else {
+        checkboxType.style.backgroundColor = 'initial';
+        checkboxType.style.boxShadow = 'none';
+      }
+    });
+  }
 
-function changeCheckbox() {
-  const checkboxes = document.querySelectorAll('.checkbox-type input[type="checkbox"]');
-  checkboxes.forEach(checkbox => {
-    const checkboxType = checkbox.parentElement;
-    if (checkbox.checked) {
-      checkboxType.style.backgroundColor = 'var(--magnolia)';
-      checkboxType.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+  function nextStep() {
+    step3Data.set(selectedAddons); 
+    dispatch('next');
+  }
+
+  function prevStep() {
+    dispatch('back');
+  }
+
+  function handleAddonSelection(e) {
+    const clickedCheckbox = e.target;
+    const addonId = clickedCheckbox.parentElement.id;
+    const addonTitle = clickedCheckbox.parentElement.querySelector('h2').innerText;
+    const addonPrice = clickedCheckbox.parentElement.querySelector('.price').textContent;
+    if (clickedCheckbox.checked) {
+      // Si el addon está seleccionado, agregarlo a la lista de addons seleccionados
+      selectedAddons.push({ id: addonId,  price: addonPrice, Title: addonTitle });
+      changeCheckbox()
     } else {
-      checkboxType.style.backgroundColor = 'initial';
-      checkboxType.style.boxShadow = 'none';
+      // Si el addon está deseleccionado, eliminarlo de la lista de addons seleccionados
+      selectedAddons = selectedAddons.filter(addon => addon.id !== addonId);
+      changeCheckbox()
     }
-  });
-}
 
- // Variable para almacenar los addons seleccionados
-
- 
-
-  const nextStep = () => {
-    dispatch("next");
-    dispatch("selectedAddons", addons);
-  };
-
-  const prevStep = () => {
-    dispatch("back");
-  };
-
+    console.log('Addons seleccionados:', selectedAddons);
+  }
 </script>
 
 <main>
@@ -55,63 +65,62 @@ function changeCheckbox() {
         <div class="add-onds">
           <!-- Addon 1 -->
           <div class="checkbox-type" id="1">
-            <input type="checkbox"  on:change={toggleCheckbox}/>
+            <input type="checkbox"  on:change={handleAddonSelection}/>
             <div class="chetext">
               <h2>Online Service</h2>
               <p>Access to multiplayer Games</p>
             </div>
-            <span class="price"> +$10/yr</span> <!-- Precio para Yearly -->
+            <p class="price"> +$10/yr</p> <!-- Precio para Yearly -->
           </div>
           <!-- Addon 2 -->
           <div class="checkbox-type" id="2">
-            <input type="checkbox"  on:change={toggleCheckbox}/>
+            <input type="checkbox"  on:change={handleAddonSelection}/>
             <div class="chetext">
               <h2>Larger Storage</h2>
               <p>Extra TB of Cloud Save sssss</p>
             </div>
-            <span class="price"> +20/yr</span> <!-- Precio para Yearly -->
+            <p class="price"> +20/yr</p> <!-- Precio para Yearly -->
           </div>
           <!-- Addon 3 -->
           <div class="checkbox-type" id="3">
-            <input type="checkbox"  on:change={toggleCheckbox}/>
+            <input type="checkbox"  on:change={handleAddonSelection}/>
             <div class="chetext">
               <h2>Customizable Profile</h2>
               <p>Custom Theme in your profile</p>
             </div>
-            <span class="price"> +$20/yr</span> <!-- Precio para Yearly -->
+            <p class="price"> +$20/yr</p> <!-- Precio para Yearly -->
           </div>
           <!-- Otros addons para Yearly aquí -->
         </div>
-      {:else}
+      {:else if billingType === 'Monthly'}
         <div class="add-onds">
-          <!-- Addon 1 -->
+
           <div class="checkbox-type" id="1">
-            <input type="checkbox"  on:change={toggleCheckbox}/>
+    
+            <input type="checkbox"  on:change={handleAddonSelection}/>
             <div class="chetext">
               <h2>Online Service</h2>
               <p>Access to multiplayer Games</p>
             </div>
-            <span class="price"> +$1/mo</span> <!-- Precio predeterminado para Monthly -->
+            <p class="price"> +$1/mo</p> <!-- Precio predeterminado para Monthly -->
           </div>
-          <!-- Addon 2 -->
           <div class="checkbox-type" id="2">
-            <input type="checkbox"  on:change={toggleCheckbox}/>
+            <input type="checkbox"  on:change={handleAddonSelection}/>
             <div class="chetext">
               <h2>Larger Storage</h2>
               <p>Extra TB of Cloud Save sssss</p>
             </div>
-            <span class="price"> +$2/mo</span> <!-- Precio predeterminado para Monthly -->
+            <span class="price"> +$2/mo</span> 
           </div>
-          <!-- Addon 3 -->
+
           <div class="checkbox-type" id="3">
-            <input type="checkbox"  on:change={toggleCheckbox}/>
+            <input type="checkbox"  on:change={handleAddonSelection}/>
             <div class="chetext">
               <h2>Customizable Profile</h2>
               <p>Custom Theme in your profile</p>
             </div>
-            <span class="price"> +$2/mo</span> <!-- Precio predeterminado para Monthly -->
+            <p class="price"> +$2/mo</p> 
           </div>
-          <!-- Otros addons para Monthly aquí -->
         </div>
       {/if}
       <div class="btn-grup">

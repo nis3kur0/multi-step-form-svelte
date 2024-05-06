@@ -1,5 +1,30 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
+  import { step2Data, step3Data } from './FormStores.js';
+
+  let selectedPlan = '';
+  let selectedPrice = '';
+  let billingType = '';
+  let selectedAddons = [];
+  
+
+  onMount(() => {
+    const unsubscribeStep2 = step2Data.subscribe(data => {
+      selectedPlan = data.selectedPlan;
+      selectedPrice = data.selectedPrice;
+      billingType = data.billingType;
+    });
+
+    const unsubscribeStep3 = step3Data.subscribe(data => {
+      selectedAddons = data;
+    });
+
+    return () => {
+      unsubscribeStep2();
+      unsubscribeStep3();
+    };
+  });
+
   
 
   const dispatch = createEventDispatcher();
@@ -13,63 +38,40 @@
   };
 
 
-
-  export let billingType ="Monthly";
-
-  export let selectedPlan = '';
-  export let selectedPrice = '';
-
-
-  onMount(() => {
-    // Escuchando el evento 'selected' enviado desde el componente 2
-    const unsubscribe = dispatch('selected', (event) => {
-      // Accediendo a los detalles del evento para obtener plan y precio
-      selectedPlan = event.detail.plan;
-      selectedPrice = event.detail.price;
-    });
-
-    // Asegurándose de desuscribirse del evento al desmontar el componente
-    return unsubscribe;
-
-  });
-
-  console.log(selectedPlan);
-
 </script>
 
 <main>
   <div class="container">
-    <section class="form-container">
+    <section class="form-container"> 
       <h1 class="info">Finishing Up</h1>
       <p>Double check everything looks OK before confirming.</p>
 
       <div class="sumary">
 
-        <div class="time">
-         {selectedPlan} {selectedPrice} ({billingType})
+        <div class="data">
+         <div class="selectedPlan"> {selectedPlan} ({billingType})</div> <div class="selectedPrice"> {selectedPrice} </div> 
         </div>
 
         <div class="adds">
-          <p> add onn </p>
+          <p>Add-ons:</p>
+          {#each selectedAddons as addon}
+            <p>{addon.Title}: {addon.price}</p>
+          {/each}
         </div>
+      </div>
         
 
-      </div>
       <div class="total"> 
         <p> Total </p>
-        <p> Precio total </p>
+        <p> </p>
       </div>
-
-
-
- 
-
       <div class="btn-group">
         <button on:click={prevStep}>Go back</button>
         <button class="next" on:click={nextStep}> Confirm </button>
       </div>
-    </section>
 
+    </section>
+        
     <section class="steps-container">
       <div class="scontainer">
         <div class="step" id="one">
@@ -130,6 +132,18 @@
 
 }
 
+.data {
+
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid hsl(0, 0%, 0%);
+}
+.adds {
+  justify-content: space-between;
+    align-items: center;
+
+}
 .total {
 
   display: flex;

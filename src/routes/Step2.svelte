@@ -1,14 +1,16 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { step2Data } from './FormStores.js';
+  import { createEventDispatcher } from 'svelte';
 
-  let billingType = "Monthly";
-  let selectedCard = null;
-  let checkboxChecked = false;
- let selectedPlan = '';
- let selectedPrice = '';
   const dispatch = createEventDispatcher();
 
-  function selectCard(e) { 
+  let billingType = 'Monthly';
+  let selectedCard = null;
+  let checkboxChecked = false;
+  let selectedPlan = '';
+  let selectedPrice = '';
+
+  function selectCard(e) {
     const clickedCard = e.currentTarget;
 
     const checkboxChecked = document.getElementById('checkbox').checked;
@@ -41,9 +43,6 @@
       price: priceText
     });
   }
-    
-
-
 
   function toggleCheckbox() {
     checkboxChecked = !checkboxChecked;
@@ -79,15 +78,23 @@
     dispatch("billingTypeUpdate", billingType);
   }
 
-
   const nextStep = () => {
-    dispatch("next");
-    
+    step2Data.set({ billingType, selectedPlan, selectedPrice }); // Guardar los datos en el store
+    dispatch("next"); // Emitir evento 'next' para avanzar al siguiente paso
   };
 
   const prevStep = () => {
     dispatch("back");
   };
+
+  // Observar los cambios en el store step2Data
+  let step2DataSubscription;
+  step2DataSubscription = step2Data.subscribe(value => {
+    console.log('Datos del Step 2 guardados en el store:', value);
+  });
+
+  // Al salir del componente, cancelar la suscripción al store
+ 
 </script>
 
 <main>

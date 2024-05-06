@@ -1,6 +1,8 @@
-<script> 
-
-import { createEventDispatcher } from 'svelte';
+<script>
+  import { step1Data } from './FormStores.js';
+  import { createEventDispatcher } from 'svelte';
+  import { onDestroy } from 'svelte';
+  
   const dispatch = createEventDispatcher();
 
   // Declarar las variables del primer paso
@@ -8,27 +10,35 @@ import { createEventDispatcher } from 'svelte';
   export let email = '';
   export let phone = '';
 
-  const NextPage = () => {
+  const NextStep = () => {
     if (name && email && phone) {
-      dispatch('next', { name, email, phone });
+      step1Data.set({ name, email, phone }); 
+      dispatch('next');// Guardar los datos en el store
+      dispatch('next'); // Emitir evento 'next'
     } else {
       alert('Por favor complete todos los campos antes de continuar.');
     }
-   
   };
 
+  let step1DataSubscription;
+  step1DataSubscription = step1Data.subscribe(value => {
+    console.log('Datos del Step 1 guardados en el store:', value);
+  });
+
+  // Al salir del componente, cancelar la suscripción al store
+  onDestroy(() => {
+    step1DataSubscription();
+  });
 </script>
 
 <main>
-
   <div class="container">
-    
     <section class="form-container">
       <div class="title"> 
         <h1 class="info">Personal Info</h1>
         <span>Please provide your name, email Adress and Phone Number.</span>
-    </div>    
-   <label for="name">
+      </div>    
+      <label for="name">
         <p>Name</p>
         <input bind:value={name} id="name" placeholder="e.g Stephen King" required />
       </label>
@@ -41,10 +51,8 @@ import { createEventDispatcher } from 'svelte';
         <input type="tel" bind:value={phone} id="phone" placeholder="+58 412 404 4040" required />
       </label>
       <br />
-      <button class="next" on:click={NextPage}> Next Step </button>
+      <button class="next" on:click={NextStep}> Next Step </button>
     </section>
-
-    
 
     <section class="steps-container">
       <div class="scontainer">
@@ -71,6 +79,7 @@ import { createEventDispatcher } from 'svelte';
     </section>
   </div>
 </main>
+
 
 <style>
   :global(:root) {

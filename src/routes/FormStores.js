@@ -6,8 +6,8 @@ export const step1Data = writable({
   // Define aquí las propiedades que quieras almacenar para el paso 1
   // Por ejemplo:
   firstName: '',
-  lastName: '',
   email: '',
+  phone: '',
 });
 
 // Creamos un store para el paso 2 del formulario
@@ -21,7 +21,8 @@ export const step2Data = writable({
 
 // Creamos un store para el paso 3 del formulario
 export const step3Data = writable({
-  // Define aquí las propiedades que quieras almacenar para el paso 3
+    selectedAddons: []
+    
 });
 
 // Creamos un store para el paso 4 del formulario

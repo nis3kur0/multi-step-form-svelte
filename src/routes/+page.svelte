@@ -15,7 +15,7 @@
     billingType = e.detail;
   }
   let selectedPlan = '';
-    let selectedPrice = '';
+  let selectedPrice = '';
 
     function handleSelected(event) {
         selectedPlan = event.detail.plan;
@@ -33,6 +33,9 @@
   const submitForm = () => {
     // Aquí puedes enviar los datos del formulario a Supabase
   };
+onMount (() => {
+    console.log(currentPage);
+  });
 </script>
 
 {#if currentPage === 0}
