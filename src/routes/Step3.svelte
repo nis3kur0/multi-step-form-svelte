@@ -1,10 +1,10 @@
 <script>
-  import { step3Data } from './FormStores.js';
+  import { step3Data } from './FormStore.js';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  export let billingType = 'Monthly';
+   export let billingType = 'Monthly';
 
   let selectedAddons = [];
 
@@ -22,7 +22,6 @@
       }
     });
   }
-
   function nextStep() {
     step3Data.set(selectedAddons); 
     dispatch('next');
@@ -38,16 +37,13 @@
     const addonTitle = clickedCheckbox.parentElement.querySelector('h2').innerText;
     const addonPrice = clickedCheckbox.parentElement.querySelector('.price').textContent;
     if (clickedCheckbox.checked) {
-      // Si el addon está seleccionado, agregarlo a la lista de addons seleccionados
       selectedAddons.push({ id: addonId,  price: addonPrice, Title: addonTitle });
       changeCheckbox()
     } else {
-      // Si el addon está deseleccionado, eliminarlo de la lista de addons seleccionados
       selectedAddons = selectedAddons.filter(addon => addon.id !== addonId);
       changeCheckbox()
     }
 
-    console.log('Addons seleccionados:', selectedAddons);
   }
 </script>
 
@@ -61,38 +57,8 @@
 
         </div>
         
-        {#if billingType === "Yearly"}
-        <div class="add-onds">
-          <!-- Addon 1 -->
-          <div class="checkbox-type" id="1">
-            <input type="checkbox"  on:change={handleAddonSelection}/>
-            <div class="chetext">
-              <h2>Online Service</h2>
-              <p>Access to multiplayer Games</p>
-            </div>
-            <p class="price"> +$10/yr</p> <!-- Precio para Yearly -->
-          </div>
-          <!-- Addon 2 -->
-          <div class="checkbox-type" id="2">
-            <input type="checkbox"  on:change={handleAddonSelection}/>
-            <div class="chetext">
-              <h2>Larger Storage</h2>
-              <p>Extra TB of Cloud Save sssss</p>
-            </div>
-            <p class="price"> +20/yr</p> <!-- Precio para Yearly -->
-          </div>
-          <!-- Addon 3 -->
-          <div class="checkbox-type" id="3">
-            <input type="checkbox"  on:change={handleAddonSelection}/>
-            <div class="chetext">
-              <h2>Customizable Profile</h2>
-              <p>Custom Theme in your profile</p>
-            </div>
-            <p class="price"> +$20/yr</p> <!-- Precio para Yearly -->
-          </div>
-          <!-- Otros addons para Yearly aquí -->
-        </div>
-      {:else if billingType === 'Monthly'}
+        {#if billingType === "Monthly"}
+
         <div class="add-onds">
 
           <div class="checkbox-type" id="1">
@@ -102,7 +68,7 @@
               <h2>Online Service</h2>
               <p>Access to multiplayer Games</p>
             </div>
-            <p class="price"> +$1/mo</p> <!-- Precio predeterminado para Monthly -->
+            <p class="price"> +$1/mo</p>
           </div>
           <div class="checkbox-type" id="2">
             <input type="checkbox"  on:change={handleAddonSelection}/>
@@ -122,6 +88,36 @@
             <p class="price"> +$2/mo</p> 
           </div>
         </div>
+
+      {:else if billingType === 'Yearly'}
+
+      <div class="add-onds">
+        <div class="checkbox-type" id="1">
+          <input type="checkbox"  on:change={handleAddonSelection}/>
+          <div class="chetext">
+            <h2>Online Service</h2>
+            <p>Access to multiplayer Games</p>
+          </div>
+          <p class="price"> +$10/yr</p> 
+        </div>
+        <div class="checkbox-type" id="2">
+          <input type="checkbox"  on:change={handleAddonSelection}/>
+          <div class="chetext">
+            <h2>Larger Storage</h2>
+            <p>Extra TB of Cloud Save sssss</p>
+          </div>
+          <p class="price"> $20/yr</p> 
+        </div>
+        <div class="checkbox-type" id="3">
+          <input type="checkbox"  on:change={handleAddonSelection}/>
+          <div class="chetext">
+            <h2>Customizable Profile</h2>
+            <p>Custom Theme in your profile</p>
+          </div>
+          <p class="price"> +$20/yr</p> 
+        </div>
+      </div>
+     
       {/if}
       <div class="btn-grup">
         <button on:click={prevStep} class="back">Go back</button>
@@ -255,36 +251,7 @@
     cursor: pointer;
   }
 
-  .steps-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 274px;
-    height: 568px;
-    background-image: url("bg-sidebar-desktop.svg");
-    background-size: cover;
-    padding: 15px;
-    border-radius: 20px;
-  }
-
-  .step {
-    display: flex;
-    align-items: center;
-    color: white;
-    text-align: left;
-    margin-left: 20px;
-    gap: 15px;
-  }
-
-  .circle {
-    width: 30px; /* Ancho del círculo */
-    height: 30px; /* Alto del círculo */
-    border-radius: 50%; /* Hace que el div tenga forma circular */
-    border: 2px solid white; /* Borde blanco */
-    text-align: center;
-    align-content: center;
-  }
-
+  
   #tres {
     background-color: var(--light-gray);
     color: black;

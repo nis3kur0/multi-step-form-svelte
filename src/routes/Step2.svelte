@@ -1,5 +1,5 @@
 <script>
-  import { step2Data } from './FormStores.js';
+  import { step2Data } from './FormStore.js';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -33,8 +33,6 @@
 
     clickedCard.classList.add("selected");
     selectedCard = clickedCard;
-
-    // Almacena los textos en variables independientes
     selectedPlan = planText;
     selectedPrice = priceText;
 
@@ -79,21 +77,16 @@
   }
 
   const nextStep = () => {
-    step2Data.set({ billingType, selectedPlan, selectedPrice }); // Guardar los datos en el store
-    dispatch("next"); // Emitir evento 'next' para avanzar al siguiente paso
+    step2Data.set({ billingType, selectedPlan, selectedPrice }); 
+    dispatch("next");
   };
 
   const prevStep = () => {
     dispatch("back");
   };
 
-  // Observar los cambios en el store step2Data
-  let step2DataSubscription;
-  step2DataSubscription = step2Data.subscribe(value => {
-    console.log('Datos del Step 2 guardados en el store:', value);
-  });
+  
 
-  // Al salir del componente, cancelar la suscripción al store
  
 </script>
 
@@ -204,15 +197,7 @@
 </main>
 
 <style>
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 25px;
-    width: 55%;
-    height: 100%;
-  }
-
+  
   .container {
     display: flex;
     flex-direction: row-reverse;
@@ -229,6 +214,19 @@
     padding: 10px;
   }
 
+  h1 {
+    color: var(--marine-blue);
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 25px;
+    width: 55%;
+    height: 100%;
+  }
+  
   .plan-data {
     display: flex;
     flex-direction: column;
@@ -271,8 +269,8 @@
   }
 
   .card:hover {
-    border-color: #001352; /* Cambia el borde al pasar el cursor sobre el div */
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75); /* Agrega sombreado */
+    border-color: #001352; 
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   }
 
   .plan {
@@ -324,28 +322,9 @@
     cursor: pointer;
   }
 
-  /* formulario */
+ 
 
-  h1 {
-    color: var(--marine-blue);
-  }
-
-  form {
-    width: 320px;
-    height: 430px;
-    padding: 1.5em;
-  }
-
-  .next {
-    padding: 0, 75rem;
-    text-align: center;
-    background-color: var(--marine-blue);
-    color: white;
-    border-radius: 0, 25;
-    cursor: pointer;
-  }
-
-  /* checkbox  */
+  /* checkboxxddd  */
 
   .checkbox-style {
     width: 100%;
@@ -422,37 +401,7 @@
     background-color: #535db3;
   }
 
-  /* Barra de pasos */
-
-  .steps-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 274px;
-    height: 568px;
-    background-image: url("bg-sidebar-desktop.svg");
-    background-size: cover;
-    padding: 15px;
-    border-radius: 20px;
-  }
-
-  .step {
-    display: flex;
-    align-items: center;
-    color: white;
-    text-align: left;
-    margin-left: 20px;
-    gap: 15px;
-  }
-
-  .circle {
-    width: 30px; /* Ancho del círculo */
-    height: 30px; /* Alto del círculo */
-    border-radius: 50%; /* Hace que el div tenga forma circular */
-    border: 2px solid white; /* Borde blanco */
-    text-align: center;
-    align-content: center;
-  }
+  
 
   #dos {
     background-color: var(--light-gray);
